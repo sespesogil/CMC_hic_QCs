@@ -1,6 +1,6 @@
 varname=    #add the date (/mm/day/year) and ID run
 
-
+REF=
 # listing all fastq files
 
 find `pwd` -name \*.fastq.gz -exec ls {} \; > list.$varname.ATACseq.txt
