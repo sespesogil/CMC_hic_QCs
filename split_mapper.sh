@@ -1,5 +1,7 @@
-varname=    #add the date (/mm/day/year) and ID run
 
+# load required dependencies
+
+varname=    #add the date (/mm/day/year) and ID run
 REF=
 # listing all fastq files
 cd    #where this script must be placed
