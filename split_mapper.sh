@@ -1,6 +1,8 @@
 
-module load bwa/0.7.15
-module load samtools/1.4.1
+
+# load dependencies 
+
+module load bwa samtools
 
 
 varname=    #add the date (/mm/day/year) and ID run
