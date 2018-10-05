@@ -1,42 +1,35 @@
 
-# load required dependencies
+module load bwa/0.7.15
+module load samtools/1.4.1
+
 
 varname=    #add the date (/mm/day/year) and ID run
-REF=
+
+REF=   # add reference genome
+dir=    # fastq directories
+
 # listing all fastq files
-cd    #where this script must be placed
 
-find `pwd` -name \*.fastq.gz -exec ls {} \; > list.$varname.HiC.txt
-
-find `pwd` -name \*.fastq.gz -exec dirname {} \; | sort | uniq > repository
-
+find $dir -name \*.fastq -exec ls {} \; | sort >  list.$varname.HiC.txt
 
 # creating folders
 
-dir=`pwd`
 mkdir $dir/mapping
-fastq=$(head repository)
 
-# gunzipping 
+# gunzipping
 
 tr '\n' '\0' < list.$varname.txt | xargs -0 -r gunzip --
 
-### split-mapping 
+### split-mapping
+find $dir -name \*.fastq -printf '%f\n' | cut -d"." -f1 | sort | uniq > filenames.txt
+cat filenames.txt | while read LINE; do
 
-find . -name \*.fastq -printf '%f\n' | cut -d"." -f1 | sort | uniq > filenames.txt
+        bwa mem -t 4 $REF $dir/${LINE}.R1.fastq $dir/${LINE}.R2.fastq > $dir/mapping/$varname.sam
+        samtools view -b -S -o $dir/mapping/$varname.bam $dir/mapping/$varname.sam
+        samtools flagstat $dir/mapping/$varname.bam | sed -i '${LINE}' > $dir/mapping/$varname.txt
+        rm $dir/mapping/$varname.sam
 
-find . -name \*.fastq -printf "%h\n" | sort | uniq > path.txt
-
-cat filenames.txt | while read LINE; do 
-
-	bwa mem -t 4 $REF $fastq/"${LINE}".R1.fastq $fastq/"${LINE}".R2.fastq > $dir/mapping/$varname.sam
-	samtools view -b -S -o $dir/mapping/$varname.bam $dir/mapping/$varname.sam
-	samtools flagstat $dir/mapping/$varname.bam | sed -i '${LINE}' > $dir/mapping/$varname.txt
-	rm $dir/mapping/$varname.sam
-	; done
+done
 
 
 cat $dir/mapping/*.txt > $dir/mapping/report.$varname.txt
-
-
-
