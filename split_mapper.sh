@@ -22,7 +22,7 @@ tr '\n' '\0' < list.$varname.txt | xargs -0 -r gunzip --
 ### split-mapping 
 
 
-cat filenames.txt | while read LINE; do 
+cat repository | while read LINE; do 
 
 	bwa mem -t 4 $REF $fastq/"${LINE}".R1.fastq $fastq/"${LINE}".R2.fastq > $dir/mapping/$varname.sam
 	samtools view -b -S -o $dir/mapping/$varname.bam $dir/mapping/$varname.sam
