@@ -2,7 +2,7 @@ varname=    #add the date (/mm/day/year) and ID run
 
 REF=
 # listing all fastq files
-cd ./   #where this script must be placed
+cd    #where this script must be placed
 
 find `pwd` -name \*.fastq.gz -exec ls {} \; > list.$varname.HiC.txt
 
