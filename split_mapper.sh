@@ -26,9 +26,9 @@ tr '\n' '\0' < list.$varname.txt | xargs -0 -r gunzip --
 find $dir -name \*.fastq -printf '%f\n' | cut -d"." -f1 | sort | uniq > filenames.txt
 cat filenames.txt | while read LINE; do
 
-        bwa mem -t 4 $REF $dir/${LINE}.R1.fastq $dir/${LINE}.R2.fastq > $dir/mapping/$varname.sam
-        samtools view -b -S -o $dir/mapping/$varname.bam $dir/mapping/$varname.sam
-        samtools flagstat $dir/mapping/$varname.bam | sed -i '${LINE}' > $dir/mapping/$varname.txt
+        bwa mem -t 4 $REF $dir/${LINE}.R1.fastq $dir/${LINE}.R2.fastq > $dir/mapping/${LINE}.sam
+        samtools view -b -S -o $dir/mapping/${LINE}.bam $dir/mapping/${LINE}.sam
+        samtools flagstat $dir/mapping/${LINE}.bam | sed -i '${LINE}' > $dir/mapping/${LINE}.report.txt
         rm $dir/mapping/$varname.sam
 
 done
